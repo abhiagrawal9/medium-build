@@ -1,5 +1,10 @@
 {
+  "name": "medium-build",
+  "version": "0.1.0",
+  "author": "Abhishek Agrawal",
+  "description": "Medium clone using Next.js, TypeScript, Sanity CMS and TailwindCSS",
   "private": true,
+  "license": "MIT",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
