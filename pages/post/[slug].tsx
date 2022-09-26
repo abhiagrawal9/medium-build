@@ -9,7 +9,6 @@ type Props = {
 };
 
 const Post = ({ post }: Props) => {
-  console.log(post);
   return (
     <main>
       <Header />
@@ -47,7 +46,6 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { slug } = ctx.params!;
-  console.log('helllo : ' + slug);
   const query = `*[_type == 'post' && slug.current=='${slug}'][0]{
     _id,
     _createdAt,
