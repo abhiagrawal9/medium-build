@@ -9,6 +9,7 @@ type Props = {
 };
 
 const Post = ({ post }: Props) => {
+  console.log(post);
   return (
     <main>
       <Header />
@@ -46,7 +47,7 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { slug } = ctx.params!;
-  const query = `*[_type == 'post' && slug.current=='${slug}'][0]{
+  const query = `*[_type == 'post' && slug.current==$slug][0]{
     _id,
     _createdAt,
     title,
@@ -60,7 +61,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 body
   }`;
 
-  const post = await sanityClient.fetch(query);
+  const post = await sanityClient.fetch(query, { slug });
 
   return {
     props: {
