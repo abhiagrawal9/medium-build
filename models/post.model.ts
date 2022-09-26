@@ -1,11 +1,13 @@
 interface Author {
-  image: any[];
+  image: string;
   name: string;
 }
 
 interface MainImage {
   _type: string;
-  asset: any[];
+  asset: {
+    url: string;
+  };
 }
 
 interface Slug {

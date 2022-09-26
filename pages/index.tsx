@@ -21,6 +21,17 @@ const Home: NextPage<Props> = ({ posts }) => {
       <Banner />
 
       {/* Posts */}
+      <div>
+        {posts.map((post: Post) => {
+          return (
+            <Link key={post._id} href={`/post/${post.slug.current}`}>
+              <div>
+                <img src={urlFor(post.mainImage).url()!} alt={post.title} />
+              </div>
+            </Link>
+          );
+        })}
+      </div>
     </div>
   );
 };
@@ -28,6 +39,7 @@ const Home: NextPage<Props> = ({ posts }) => {
 export default Home;
 
 import { GetServerSideProps } from 'next';
+import Link from 'next/link';
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const query = `*[_type == 'post']{
