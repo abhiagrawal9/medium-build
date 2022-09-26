@@ -63,6 +63,12 @@ body
 
   const post = await sanityClient.fetch(query, { slug });
 
+  if (!post) {
+    return {
+      notFound: true,
+    };
+  }
+
   return {
     props: {
       post,
