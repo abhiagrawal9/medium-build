@@ -10,7 +10,7 @@ const Header = (props: Props) => {
         <Link href='/'>
           <img
             className='w-44 object-contain cursor-pointer'
-            src='https://links.papareact.com/yvf'
+            src='https://cdn-images-1.medium.com/max/1600/1*5ztbgEt4NqpVaxTc64C-XA.png'
             alt='logo'
           />
         </Link>
