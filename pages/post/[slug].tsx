@@ -184,7 +184,7 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { slug } = ctx.params!;
-  const query = `*[_type == 'post' && slug.current==$slug][0]{
+  const query = `*[_type == 'post' && slug.current=='my-second-post'][0]{
     _id,
     _createdAt,
     title,
@@ -193,12 +193,16 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
       name,
       image
     },
+    'comments': *[
+      _type == "comment" && post._ref == ^._id && 
+      approved == true],
     description,
   mainImage,
 body
   }`;
 
   const post = await sanityClient.fetch(query, { slug });
+  console.log(post.comments);
 
   if (!post) {
     return {

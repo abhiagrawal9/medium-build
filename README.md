@@ -1,6 +1,6 @@
-# Next.js + Tailwind CSS Example
+# Medium clone (Next.js)
 
-Medium clone using Next.js, typescript, sanity and tailwindcss
+Medium clone using Next.js, TypeScript, Sanity CMS and TailwindCSS.
 
 ## How to use
 
