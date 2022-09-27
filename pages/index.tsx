@@ -21,7 +21,6 @@ const Home: NextPage<Props> = ({ posts }) => {
 
       <Header />
       <Banner />
-
       <Posts posts={posts} />
     </div>
   );
