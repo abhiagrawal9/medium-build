@@ -1,6 +1,6 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { GetStaticPaths, GetStaticProps } from 'next';
-import React from 'react';
+import React, { useState } from 'react';
 import Header from '../../components/Header';
 import { Post } from '../../models/post.model';
 import { sanityClient, urlFor } from '../../sanity';
@@ -12,6 +12,7 @@ type Props = {
 };
 
 const Post = ({ post }: Props) => {
+  const [submitted, setSubmitted] = useState(false);
   const {
     register,
     handleSubmit,
@@ -23,14 +24,12 @@ const Post = ({ post }: Props) => {
       method: 'POST',
       body: JSON.stringify(data),
     })
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        console.log(data);
+      .then(() => {
+        setSubmitted(true);
       })
       .catch((err) => {
         console.error(err);
+        setSubmitted(false);
       });
   };
 
@@ -85,62 +84,74 @@ const Post = ({ post }: Props) => {
 
       <hr className='max-w-lg my-5 mx-auto border border-yellow-500' />
 
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className='flex flex-col p-5 max-w-2xl mx-auto mb-10'
-      >
-        <h3 className='text-sm text-yellow-500'>Enjoyed this article?</h3>
-        <h4 className='text-3xl font-bold'>Leave a comment below!</h4>
-        <hr className='py-3 mt-2' />
-
-        <input type='hidden' {...register('_id')} name='_id' value={post._id} />
-
-        <label className='block mb-5' htmlFor='name'>
-          <span className='text-gray-700 '>Name</span>
-          <input
-            className='shadow border rounded py-2 px-3 form-input mt-1 block w-full ring-yellow-500 outline-none focus:ring'
-            placeholder='John Apppleseed'
-            type='text'
-            id='name'
-            {...register('name', { required: true })}
-          />
-        </label>
-        <label className='block mb-5' htmlFor='email'>
-          <span className='text-gray-700 '>Email</span>
-          <input
-            className='shadow border rounded py-2 px-3 form-input mt-1 block w-full ring-yellow-500 outline-none focus:ring'
-            placeholder='john@mail.com'
-            type='email'
-            id='email'
-            {...register('email', { required: true })}
-          />
-        </label>
-        <label className='block mb-5' htmlFor='comment'>
-          <span className='text-gray-700 '>Comment</span>
-          <textarea
-            className='shadow border rounded py-2 px-3 form-textarea mt-1 block w-full ring-yellow-500 outline-none focus:ring'
-            placeholder='Write your comment here'
-            rows={8}
-            id='comment'
-            {...register('comment', { required: true })}
-          />
-        </label>
-        <div className='flex flex-col p-5'>
-          {errors.name && (
-            <span className='text-red-500'>Name is required</span>
-          )}
-          {errors.email && (
-            <span className='text-red-500'>Email is required</span>
-          )}
-          {errors.comment && (
-            <span className='text-red-500'>Comment is required</span>
-          )}
+      {submitted ? (
+        <div className='flex flex-col p-10 my-10 bg-yellow-500 rounded text-white max-w-2xl mx-auto'>
+          <h3 className='text-3xl font-bold'>Thank you for submitting!</h3>
+          <p>Once it is approved, it will appear below!</p>
         </div>
-        <input
-          type='submit'
-          className='shodow bg-yellow-500 hover:bg-yellow-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded cursor-pointer'
-        />
-      </form>
+      ) : (
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className='flex flex-col p-5 max-w-2xl mx-auto mb-10'
+        >
+          <h3 className='text-sm text-yellow-500'>Enjoyed this article?</h3>
+          <h4 className='text-3xl font-bold'>Leave a comment below!</h4>
+          <hr className='py-3 mt-2' />
+
+          <input
+            type='hidden'
+            {...register('_id')}
+            name='_id'
+            value={post._id}
+          />
+
+          <label className='block mb-5' htmlFor='name'>
+            <span className='text-gray-700 '>Name</span>
+            <input
+              className='shadow border rounded py-2 px-3 form-input mt-1 block w-full ring-yellow-500 outline-none focus:ring'
+              placeholder='John Apppleseed'
+              type='text'
+              id='name'
+              {...register('name', { required: true })}
+            />
+          </label>
+          <label className='block mb-5' htmlFor='email'>
+            <span className='text-gray-700 '>Email</span>
+            <input
+              className='shadow border rounded py-2 px-3 form-input mt-1 block w-full ring-yellow-500 outline-none focus:ring'
+              placeholder='john@mail.com'
+              type='email'
+              id='email'
+              {...register('email', { required: true })}
+            />
+          </label>
+          <label className='block mb-5' htmlFor='comment'>
+            <span className='text-gray-700 '>Comment</span>
+            <textarea
+              className='shadow border rounded py-2 px-3 form-textarea mt-1 block w-full ring-yellow-500 outline-none focus:ring'
+              placeholder='Write your comment here'
+              rows={8}
+              id='comment'
+              {...register('comment', { required: true })}
+            />
+          </label>
+          <div className='flex flex-col p-5'>
+            {errors.name && (
+              <span className='text-red-500'>Name is required</span>
+            )}
+            {errors.email && (
+              <span className='text-red-500'>Email is required</span>
+            )}
+            {errors.comment && (
+              <span className='text-red-500'>Comment is required</span>
+            )}
+          </div>
+          <input
+            type='submit'
+            className='shodow bg-yellow-500 hover:bg-yellow-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded cursor-pointer'
+          />
+        </form>
+      )}
     </main>
   );
 };
