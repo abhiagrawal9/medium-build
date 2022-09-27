@@ -62,8 +62,6 @@ const Post = ({ post }: Props) => {
   );
 };
 
-export default Post;
-
 export const getStaticPaths: GetStaticPaths = async (ctx) => {
   const query = `
     *[_type == 'post']{
@@ -121,3 +119,5 @@ body
     revalidate: 60,
   };
 };
+
+export default Post;
