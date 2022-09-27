@@ -199,7 +199,7 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { slug } = ctx.params!;
-  const query = `*[_type == 'post' && slug.current=='my-second-post'][0]{
+  const query = `*[_type == 'post' && slug.current==$slug][0]{
     _id,
     _createdAt,
     title,
