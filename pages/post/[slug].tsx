@@ -73,5 +73,6 @@ body
     props: {
       post,
     },
+    revalidate: 60,
   };
 };
