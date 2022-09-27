@@ -202,7 +202,6 @@ body
   }`;
 
   const post = await sanityClient.fetch(query, { slug });
-  console.log(post.comments);
 
   if (!post) {
     return {
