@@ -23,4 +23,5 @@ export interface Post {
   slug: Slug;
   title: string;
   _createdAt: string;
+  body: any[];
 }
