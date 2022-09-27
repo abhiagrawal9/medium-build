@@ -1,15 +1,39 @@
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import React from 'react';
 import Header from '../../components/Header';
 import { Post } from '../../models/post.model';
 import { sanityClient, urlFor } from '../../sanity';
 import PortableText from 'react-portable-text';
+import { Form } from '../../models/form.model';
 
 type Props = {
   post: Post;
 };
 
 const Post = ({ post }: Props) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Form>();
+
+  const onSubmit: SubmitHandler<Form> = async (data) => {
+    await fetch('/api/createComment', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
   return (
     <main>
       <Header />
@@ -61,10 +85,16 @@ const Post = ({ post }: Props) => {
 
       <hr className='max-w-lg my-5 mx-auto border border-yellow-500' />
 
-      <form className='flex flex-col p-5 max-w-2xl mx-auto mb-10'>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className='flex flex-col p-5 max-w-2xl mx-auto mb-10'
+      >
         <h3 className='text-sm text-yellow-500'>Enjoyed this article?</h3>
         <h4 className='text-3xl font-bold'>Leave a comment below!</h4>
         <hr className='py-3 mt-2' />
+
+        <input type='hidden' {...register('_id')} name='_id' value={post._id} />
+
         <label className='block mb-5' htmlFor='name'>
           <span className='text-gray-700 '>Name</span>
           <input
@@ -72,7 +102,7 @@ const Post = ({ post }: Props) => {
             placeholder='John Apppleseed'
             type='text'
             id='name'
-            name='name'
+            {...register('name', { required: true })}
           />
         </label>
         <label className='block mb-5' htmlFor='email'>
@@ -82,7 +112,7 @@ const Post = ({ post }: Props) => {
             placeholder='john@mail.com'
             type='email'
             id='email'
-            name='email'
+            {...register('email', { required: true })}
           />
         </label>
         <label className='block mb-5' htmlFor='comment'>
@@ -92,9 +122,24 @@ const Post = ({ post }: Props) => {
             placeholder='Write your comment here'
             rows={8}
             id='comment'
-            name='comment'
+            {...register('comment', { required: true })}
           />
         </label>
+        <div className='flex flex-col p-5'>
+          {errors.name && (
+            <span className='text-red-500'>Name is required</span>
+          )}
+          {errors.email && (
+            <span className='text-red-500'>Email is required</span>
+          )}
+          {errors.comment && (
+            <span className='text-red-500'>Comment is required</span>
+          )}
+        </div>
+        <input
+          type='submit'
+          className='shodow bg-yellow-500 hover:bg-yellow-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded cursor-pointer'
+        />
       </form>
     </main>
   );
